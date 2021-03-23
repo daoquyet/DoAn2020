@@ -53,8 +53,8 @@
                           </Group>
                           <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="txtPassWord" pref="153" max="32767" attributes="0"/>
-                              <Component id="txtUseName" max="32767" attributes="0"/>
+                              <Component id="txtUseName" pref="153" max="32767" attributes="0"/>
+                              <Component id="txtPassWord" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -114,15 +114,7 @@
             <Property name="text" type="java.lang.String" value="jLabel2"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtPassWord">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jTextField1"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JTextField" name="txtUseName">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jTextField1"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnDangNhap">
           <Properties>
@@ -136,16 +128,24 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Nhap Lai"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Thoat"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lbTinhTrangKN">
           <Properties>
             <Property name="text" type="java.lang.String" value="Tinh trang ket noi"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="txtPassWord">
         </Component>
       </SubComponents>
     </Container>

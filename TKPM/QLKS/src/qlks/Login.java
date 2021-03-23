@@ -6,6 +6,12 @@
 package qlks;
 import Data.*;
 import Process.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,6 +19,9 @@ import Process.*;
  */
 public class Login extends javax.swing.JFrame {
 
+    public static ResultSet rs=null;
+    public static PreparedStatement pst=null;
+    public static String manv=null;
     /**
      * Creates new form Login
      */
@@ -34,12 +43,12 @@ public class Login extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtPassWord = new javax.swing.JTextField();
         txtUseName = new javax.swing.JTextField();
         btnDangNhap = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         lbTinhTrangKN = new javax.swing.JLabel();
+        txtPassWord = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -49,10 +58,6 @@ public class Login extends javax.swing.JFrame {
 
         jLabel3.setText("jLabel2");
 
-        txtPassWord.setText("jTextField1");
-
-        txtUseName.setText("jTextField1");
-
         btnDangNhap.setText("Dang Nhap");
         btnDangNhap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -61,8 +66,18 @@ public class Login extends javax.swing.JFrame {
         });
 
         jButton1.setText("Nhap Lai");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Thoat");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         lbTinhTrangKN.setText("Tinh trang ket noi");
 
@@ -83,8 +98,8 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(lbTinhTrangKN))
                         .addGap(70, 70, 70)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtPassWord, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
-                            .addComponent(txtUseName)))
+                            .addComponent(txtUseName, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+                            .addComponent(txtPassWord)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(131, 131, 131)
                         .addComponent(btnDangNhap)
@@ -132,8 +147,41 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
-        // TODO add your handling code here:
+       if(txtUseName.getText().length()==0 || String.valueOf(txtPassWord.getPassword()).length()==0){
+           JOptionPane.showMessageDialog(null,"Nhap thong tin","Thong bao",0);
+       }else{
+           try {
+               rs=CheckLog.cLog(txtUseName.getText(),String.valueOf(txtPassWord.getPassword()));
+           } catch (SQLException ex) {
+               Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+           }
+           try {
+               if(rs.next()){
+                   manv=this.txtUseName.getText();
+                   //JOptionPane.showMessageDialog(null,"Dang nhap thanh cong","Thong bao",1);
+                   Main_JFrame JF=new Main_JFrame();
+                   this.setVisible(false);
+                   JF.setVisible(true);
+               }else{
+                   JOptionPane.showMessageDialog(null,"Tai khoan khong ton tai","Thong bao",0);
+               }
+               
+               
+           } catch (Exception e) {
+           }
+       }
     }//GEN-LAST:event_btnDangNhapActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       this.txtPassWord.setText(null);
+       this.txtUseName.setText(null);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       if(JOptionPane.showConfirmDialog(this,"Ban chac muon thoat","Thong bao",2)==0){
+           this.dispose();
+       }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -179,7 +227,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbTinhTrangKN;
-    private javax.swing.JTextField txtPassWord;
+    private javax.swing.JPasswordField txtPassWord;
     private javax.swing.JTextField txtUseName;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,12 +5,15 @@ import java.awt.Image;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
 public class Main_Window extends javax.swing.JFrame {
 
@@ -18,17 +21,68 @@ public class Main_Window extends javax.swing.JFrame {
     public Main_Window() {
      
         initComponents();
-        getConnection();
+         Show_Products_In_JTable();
     }
     String ImgPath = null;
     int pos = 0;
+     //      2 - Populate The JTable
+     // Display Data In JTable: 
+    //      1 - Fill ArrayList With The Data
+    
+    public ArrayList<Product> getProductList()
+    {
+            ArrayList<Product> productList  = new ArrayList<Product>();
+            Connection con = getConnection();
+            String query = "SELECT * FROM products";
+            
+            Statement st;
+            ResultSet rs;
+            
+        try {
+            
+            st = con.createStatement();
+            rs = st.executeQuery(query);
+            Product product;
+            
+            while(rs.next())
+            {
+                product = new Product(rs.getInt("id"),rs.getString("name"),Float.parseFloat(rs.getString("price")),rs.getString("add_date"),rs.getBytes("image"));
+                productList.add(product);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Main_Window.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return productList; 
+                
+    }
+    public void Show_Products_In_JTable()
+    {
+        ArrayList<Product> list = getProductList();
+        DefaultTableModel model = (DefaultTableModel)JTable_Products.getModel();
+        // clear jtable content
+        model.setRowCount(0);
+        Object[] row = new Object[4];
+        for(int i = 0; i < list.size(); i++)
+        {
+            row[0] = list.get(i).getId();
+            row[1] = list.get(i).getName();
+            row[2] = list.get(i).getPrice();
+            row[3] = list.get(i).getAddDate();
+            
+            model.addRow(row);
+        }
+    
+    }
      // Check Input Fields
     public boolean checkInputs()
     {
         if(
               txt_name.getText() == null
            || txt_price.getText() == null
-           || txt_AddDate.getDate() == null
+              ||  txt_AddDate.getDate() == null
+          
           ){
             return false;
         }
@@ -323,37 +377,7 @@ public class Main_Window extends javax.swing.JFrame {
     }//GEN-LAST:event_Btn_Choose_ImageActionPerformed
 
     private void Btn_InsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_InsertActionPerformed
-         
-        if(checkInputs() && ImgPath != null)
-        {
-            try {
-                 Connection con = getConnection();
-                PreparedStatement ps = con.prepareStatement("INSERT INTO products(name,price,add_date,image)"
-                        + "values(?,?,?,?) ");
-                ps.setString(1, txt_name.getText());
-                ps.setString(2, txt_price.getText());
-               
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String addDate = dateFormat.format(txt_AddDate.getDate());
-                ps.setString(3, addDate);
-               
-                InputStream img = new FileInputStream(new File(ImgPath));
-                ps.setBlob(4, img);
-                ps.executeUpdate();
-                Show_Products_In_JTable();
-               
-                JOptionPane.showMessageDialog(null, "Data Inserted");
-            } catch (Exception ex) {
-                 JOptionPane.showMessageDialog(null, ex.getMessage());
-            }
-        }else{
-            JOptionPane.showMessageDialog(null, "One Or More Field Are Empty");
-        }
-       
-        // only for test
-        System.out.println("Name => "+txt_name.getText());
-        System.out.println("Price => "+txt_price.getText());
-        System.out.println("Image => "+ImgPath);
+        
     }//GEN-LAST:event_Btn_InsertActionPerformed
 
     /**
