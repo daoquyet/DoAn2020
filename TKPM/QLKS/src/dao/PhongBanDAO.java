@@ -58,4 +58,41 @@ public class PhongBanDAO {
         
         return ds;
     }
+    public static boolean themPhongBan(String tenPhongBan){
+        boolean kq=false;
+        String sql="insert into PhongBan(TenPhongBan) values('"+tenPhongBan+"')";
+        MySqlDataAccessHelper helper=new MySqlDataAccessHelper();
+        helper.open();
+        int n=helper.executeUpdate(sql);
+        if(n==1){
+            kq=true;
+        }
+        helper.close();
+        return kq;
+    }
+    public static boolean xoaPhongBan(int maPhongBan){
+        boolean kq=false;
+        String sql=String.format("delete from phongban where MaPhongBan=%d",maPhongBan);
+        MySqlDataAccessHelper helper=new MySqlDataAccessHelper();
+        helper.open();
+        int n=helper.executeUpdate(sql);
+        if(n==1){
+            kq=true;
+        }
+        helper.close();
+        return kq;
+    }
+    public static boolean capNhapPhongBan(int maPhongBan, String tenPhongBan){
+        boolean kq=false;
+        String sql=String.format("update phongban set TenPhongBan='"+tenPhongBan+"'"+
+              "  where MaPhongBan=%d" ,maPhongBan) ;
+        MySqlDataAccessHelper helper=new MySqlDataAccessHelper();
+        helper.open();
+        int n=helper.executeUpdate(sql);
+        if(n==1){
+            kq=true;
+        }
+        helper.close();
+        return kq;
+    }
 }
